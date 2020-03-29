@@ -1,5 +1,5 @@
 # 项目说明
-本项目旨在在尽可能充分利用TI am57xx芯片中Cortex-A15、C66x DSP、EDMA等片上资源的前提下，实现一个简易的视觉里程计（SLAM前端）的库以及一个简单的测试程序，目前还没有实现SLAM后端的功能。本项目初始提交由[《视觉SLAM十四讲》第一版第九章0.4版本](https://github.com/gaoxiang12/slambook/tree/master/project/0.4)的代码复制而来，后续提交对原代码中一些不合理的地方进行了修改，并且增加了一些使该项目能够在嵌入式环境下运行以及加速的代码。
+本项目旨在在尽可能充分利用TI am57xx芯片中Cortex-A15、C66x DSP、EDMA等片上资源的前提下，实现一个简易的视觉里程计（SLAM前端）的库以及一个简单的测试程序，目前还没有实现SLAM后端的功能。本项目初始提交由[《视觉SLAM十四讲》第一版第九讲0.4版本](https://github.com/gaoxiang12/slambook/tree/master/project/0.4)的代码复制而来，后续提交对原代码中一些不合理的地方进行了修改，并且增加了一些使该项目能够在嵌入式环境下运行以及加速的代码。
 
 # 源码结构
 cmake_modules：顶级CMakeLists.txt文件中find_packages()需要使用的文件<br>
@@ -14,7 +14,19 @@ test：存放了测试程序run_vo的源代码，以及用于测试的param.yaml
 sudo apt-get install libeigen3-dev
 ```
 2. 安装am57xx processor linux sdk，默认安装在/opt目录，如安装在其它目录，请对应修改顶层CMakeLists.txt文件
-3. 交叉编译Sophus库
+3. 编译OpenCV库（SDK中TI已经交叉编译好了3.1.0版本的OpenCV）
+```shell
+sudo apt-get install build-essential libgtk2.0-dev libvtk5-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev libtbb-dev
+wget https://codeload.github.com/opencv/opencv/zip/3.1.0
+unzip 3.1.0
+cd opencv-3.1.0
+mkdir build-x86
+cd build-x86
+cmake ..
+make
+sudo make install
+```
+4. 交叉编译Sophus库
 ```shell
 git clone https://github.com/strasdat/Sophus.git
 cd Sophus
@@ -31,8 +43,9 @@ cmake ..
 make
 sudo cp libSophus.so /opt/ti-processor-sdk-linux-am57xx-evm-03.01.00.06/linux-devkit/sysroots/armv7ahf-neon-linux-gnueabi/usr/lib
 ```
-4. 交叉编译G2O库
+5. 交叉编译G2O库
 ```shell
+sudo apt-get install libqt4-dev qt4-qmake libqglviewer-dev libsuitesparse-dev libcxsparse3.1.2 libcholmod2.1.2
 git clone https://github.com/RainerKuemmerle/g2o.git
 cd g2o
 git checkout ff647bd7537860a2b53b3b774ea821a3170feb13

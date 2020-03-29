@@ -15,17 +15,10 @@ include_directories( "/usr/include/eigen3" )
 include_directories( "/usr/local/include" )
 if(NOT DEFINED ENV{TOOLCHAIN_PREFIX})
     message( "Compiling for x86." )
-    # include_directories( "/usr/local/include" )
 else()
     message( "Cross compiling for armv7a." )
     include_directories( "/opt/ti-processor-sdk-linux-am57xx-evm-03.01.00.06/linux-devkit/sysroots/armv7ahf-neon-linux-gnueabi/usr/include" )
 endif()
-
-# Sophus # put it all to ti derctory in the end or /usr/include/Sophus
-# include_directories( "/home/charming/Documents/build_sophus/Sophus" )
-
-# G2O
-# include_directories( "/home/charming/Documents/build_g2o/g2o" )
 
 if(NOT DEFINED ENV{TOOLCHAIN_PREFIX})
     set( OpenCV_LIBS
@@ -49,8 +42,6 @@ set( THIRD_PARTY_LIBS
     ${Sophus_LIBS}
     ${G2O_LIBS}
 )
-# change it to ti derectory or /usr/local/lib
-# link_directories( ${PROJECT_BINARY_DIR} )
 if(NOT DEFINED ENV{TOOLCHAIN_PREFIX})
     link_directories( "/usr/local/lib" )
 else()

@@ -78,7 +78,7 @@ int main ( int argc, char** argv )
 
         if ( vo->state_ == myslam::VisualOdometry::LOST )
             break;
-        SE3 Twc = pFrame->T_c_w_.inverse();
+        // SE3 Twc = pFrame->T_c_w_.inverse();
 
         // show the map and the camera pose
         // cv::Affine3d M (
