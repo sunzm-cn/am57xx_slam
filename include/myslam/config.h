@@ -21,16 +21,12 @@
 #define CONFIG_H
 
 #include "myslam/common_include.h"
+#include "utils/singleton.hpp"
 
-namespace myslam
-{
-class Config
-{
-private:
-    static std::shared_ptr<Config> config_;
-    cv::FileStorage file_;
+namespace myslam {
 
-    Config () {} // private constructor makes a singleton
+class Config : public Singleton<Config>
+{
 public:
     ~Config();  // close the file when deconstructing
 
@@ -43,7 +39,12 @@ public:
     {
         return T( Config::config_->file_[key] );
     }
+
+private:
+    static std::shared_ptr<Config> config_;
+    cv::FileStorage file_;
 };
+
 }
 
 #endif // CONFIG_H

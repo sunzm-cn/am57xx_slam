@@ -1,5 +1,8 @@
 # 项目说明
-本项目旨在在尽可能充分利用TI am57xx芯片中Cortex-A15、C66x DSP、EDMA等片上资源的前提下，实现一个简易的视觉里程计（SLAM前端）的库以及一个简单的测试程序，目前还没有实现SLAM后端的功能。本项目初始提交由[《视觉SLAM十四讲》第一版第九讲0.4版本](https://github.com/gaoxiang12/slambook/tree/master/project/0.4)的代码复制而来，后续提交对原代码中一些不合理的地方进行了修改，并且增加了一些使该项目能够在嵌入式环境下运行以及加速的代码。
+本项目旨在在尽可能充分利用TI am57xx芯片中Cortex-A15、C66x DSP、EDMA等片上资源的前提下，实现一个简易的视觉里程计（SLAM前端）的库以及一个简单的测试程序，目前还没有实现SLAM后端的功能。本项目初始提交由[《视觉SLAM十四讲》第一版第九讲0.4版本](https://github.com/gaoxiang12/slambook/tree/master/project/0.4)的代码复制而来，主要对源代码作了以下增改：
+1. 后续提交对原代码中一些不合理的地方进行了修改，并且增加了一些使该项目能够在嵌入式环境下运行以及加速的代码。
+2. 增加了Singleton.hpp，实现了一个线程安全的单例模式模板类，并且在Config类中继承了这个类；
+3. 将visual_odometry.cpp中add_fram函数基于switch语句的状态机改为了基于boost库中的提供的状态机模板类
 
 # 源码结构
 cmake_modules：顶级CMakeLists.txt文件中find_packages()需要使用的文件<br>
