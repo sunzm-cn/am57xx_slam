@@ -41,6 +41,4 @@ Config::~Config()
         file_.release();
 }
 
-shared_ptr<Config> Config::config_ = nullptr;
-
 }

@@ -55,7 +55,6 @@ public:
         return cv::Point3f( pos_(0,0), pos_(1,0), pos_(2,0) );
     }
 
-    static MapPoint::Ptr createMapPoint();
     static MapPoint::Ptr createMapPoint(
         const Vector3d& pos_world,
         const Vector3d& norm_,

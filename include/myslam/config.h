@@ -31,17 +31,17 @@ public:
     ~Config();  // close the file when deconstructing
 
     // set a new config file
-    static void setParameterFile( const std::string& filename );
+    void setParameterFile( const std::string& filename );
 
     // access the parameter values
     template< typename T >
-    static T get( const std::string& key )
+    T get( const std::string& key )
     {
         return T( Config::config_->file_[key] );
     }
 
 private:
-    static std::shared_ptr<Config> config_;
+    std::shared_ptr<Config> config_;
     cv::FileStorage file_;
 };
 

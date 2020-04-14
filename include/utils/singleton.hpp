@@ -5,7 +5,8 @@ template<class T>
 class Singleton
 {
 public:
-    static T& Inst() {
+    static T& Inst()
+    {
         static T instance;
         return instance;
     }

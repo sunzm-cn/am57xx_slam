@@ -27,28 +27,31 @@ Frame::Frame()
 
 }
 
-Frame::Frame ( long id, double time_stamp, SE3 T_c_w, Camera::Ptr camera, Mat color, Mat depth )
-: id_(id), time_stamp_(time_stamp), T_c_w_(T_c_w), camera_(camera), color_(color), depth_(depth), is_key_frame_(false)
+Frame::Frame ( long id) : id_(id)
 {
-
+    time_stamp_ = 0;
+    T_c_w_ = SE3();
+    color_ = std::make_shared<Mat>(Mat());
+    depth_ = std::make_shared<Mat>(Mat());
+    camera_ = std::shared_ptr<Camera>(new Camera);
+    is_key_frame_ = false;
 }
 
-Frame::~Frame()
-{
-
-}
-
-Frame::Ptr Frame::createFrame()
+Frame::Ptr Frame::createFrame(std::shared_ptr<Mat> color, std::shared_ptr<Mat> depth, double time_stamp)
 {
     static long factory_id = 0;
-    return Frame::Ptr( new Frame(factory_id++) );
+    Frame::Ptr pFrame = Frame::Ptr( new Frame(factory_id++) );
+    pFrame->color_ = color;
+    pFrame->depth_ = depth;
+    pFrame->time_stamp_ = time_stamp;
+    return pFrame;
 }
 
 double Frame::findDepth ( const cv::KeyPoint& kp )
 {
     int x = cvRound(kp.pt.x);
     int y = cvRound(kp.pt.y);
-    ushort d = depth_.ptr<ushort>(y)[x];
+    ushort d = depth_->ptr<ushort>(y)[x];
     if ( d!=0 )
     {
         return double(d)/camera_->depth_scale_;
@@ -60,7 +63,7 @@ double Frame::findDepth ( const cv::KeyPoint& kp )
         int dy[4] = {0,-1,0,1};
         for ( int i=0; i<4; i++ )
         {
-            d = depth_.ptr<ushort>( y+dy[i] )[x+dx[i]];
+            d = depth_->ptr<ushort>( y+dy[i] )[x+dx[i]];
             if ( d!=0 )
             {
                 return double(d)/camera_->depth_scale_;
@@ -89,8 +92,8 @@ bool Frame::isInFrame ( const Vector3d& pt_world )
     Vector2d pixel = camera_->world2pixel( pt_world, T_c_w_ );
     // cout<<"P_pixel = "<<pixel.transpose()<<endl<<endl;
     return pixel(0,0)>0 && pixel(1,0)>0
-        && pixel(0,0)<color_.cols
-        && pixel(1,0)<color_.rows;
+        && pixel(0,0)<color_->cols
+        && pixel(1,0)<color_->rows;
 }
 
 }

@@ -20,26 +20,26 @@
 #ifndef VISUALODOMETRY_H
 #define VISUALODOMETRY_H
 
+#include <opencv2/features2d/features2d.hpp>
+
+#include <boost/statechart/event.hpp>
+#include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/simple_state.hpp>
+#include <boost/statechart/custom_reaction.hpp>
+
 #include "myslam/common_include.h"
 #include "myslam/map.h"
-
-#include <opencv2/features2d/features2d.hpp>
+#include "myslam/frame.h"
 
 namespace myslam
 {
+
 class VisualOdometry
 {
 public:
     typedef shared_ptr<VisualOdometry> Ptr;
-    enum VOState {
-        INITIALIZING=-1,
-        OK=0,
-        LOST
-    };
 
-    VOState     state_;     // current VO status
     Map::Ptr    map_;       // map with all frames and map points
-
     Frame::Ptr  ref_;       // reference key-frame
     Frame::Ptr  curr_;      // current frame
 
@@ -67,10 +67,12 @@ public:
     double  map_point_erase_ratio_; // remove map point ratio
 
 public: // functions
-    VisualOdometry();
-    ~VisualOdometry();
+    VisualOdometry(const std::string& filename);
+    ~VisualOdometry() {};
 
     bool addFrame( Frame::Ptr frame );      // add a new frame
+    bool addFirstFrame( Frame::Ptr frame );      // add a new frame
+    bool addNextFrame( Frame::Ptr frame );      // add a new frame
 
 protected:
     // inner operation
@@ -88,6 +90,52 @@ protected:
     double getViewAngle( Frame::Ptr frame, MapPoint::Ptr point );
 
 };
+
+namespace sc = boost::statechart;
+
+struct EvAddFrame : sc::event<EvAddFrame>
+{
+public:
+    EvAddFrame(Frame::Ptr frame) : frame_(frame) {};
+
+    Frame::Ptr get_frame() const { return frame_; };
+
+private:
+    Frame::Ptr frame_;
+};
+
+struct Init;
+struct VO : sc::state_machine<VO, Init>, VisualOdometry
+{
+public:
+    VO(const std::string& filename) : VisualOdometry(filename) {};
+
+    string get_dataset_dir();
+    bool is_lost() { return lost_flag_; };
+    void set_lost() { lost_flag_ = true; };
+
+private:
+    bool lost_flag_ = false;
+};
+
+struct Init : sc::simple_state<Init, VO>
+{
+    typedef sc::custom_reaction<EvAddFrame> reactions;
+    sc::result react(const EvAddFrame &);
+};
+
+struct Ok : sc::simple_state<Ok, VO>
+{
+    typedef sc::custom_reaction<EvAddFrame> reactions;
+    sc::result react(const EvAddFrame &);
+};
+
+struct Lost : sc::simple_state<Lost, VO>
+{
+    typedef sc::custom_reaction<EvAddFrame> reactions;
+    sc::result react(const EvAddFrame &);
+};
+
 }
 
 #endif // VISUALODOMETRY_H

@@ -35,13 +35,6 @@ MapPoint::MapPoint ( long unsigned int id, const Vector3d& position, const Vecto
     observed_frames_.push_back(frame);
 }
 
-MapPoint::Ptr MapPoint::createMapPoint()
-{
-    return MapPoint::Ptr(
-        new MapPoint( factory_id_++, Vector3d(0,0,0), Vector3d(0,0,0) )
-    );
-}
-
 MapPoint::Ptr MapPoint::createMapPoint (
     const Vector3d& pos_world,
     const Vector3d& norm,
