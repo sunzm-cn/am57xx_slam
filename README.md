@@ -102,4 +102,4 @@ G2O版本：https://github.com/RainerKuemmerle/g2o/commit/ff647bd7537860a2b53b3b
 数据集：https://vision.in.tum.de/rgbd/dataset/freiburg1/rgbd_dataset_freiburg1_desk.tgz<br>
 数据集下载页面：https://vision.in.tum.de/data/datasets/rgbd-dataset/download<br>
 ## 运行run_vo测试程序测试libmyslam.so
-run_vo测试程序和libmyslam.so库均位于${CMAKE_BINARY_DIR}/out/目录，run_vo调用libmyslam.so并且通过控制台打印输出中间结果。运行run_vo前请修改param.yaml文件中的TUM数据集路径，然后执行```./build-x86/out/run_vo ./test/param.yaml```命令运行run_vo测试程序，param.yaml中还存放了myslam库中需要使用的视觉里程计参数和与数据集相对应的相机外参。
+run_vo测试程序和libmyslam.so库均位于${CMAKE_BINARY_DIR}/out/目录，run_vo调用libmyslam.so并且通过控制台打印输出中间结果。执行```./build-x86/out/run_vo ./test/param.yaml /home/charming/Downloads/data```命令运行run_vo测试程序，```./test/param.yaml```为存放TUM数据集相机外参和视觉里程计设置的文件，```/home/charming/Downloads/data```为存放TUM数据集的目录。

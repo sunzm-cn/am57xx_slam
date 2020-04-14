@@ -96,7 +96,7 @@ namespace sc = boost::statechart;
 struct EvAddFrame : sc::event<EvAddFrame>
 {
 public:
-    EvAddFrame(Frame::Ptr frame) : frame_(frame) {};
+    EvAddFrame(std::shared_ptr<Mat> color, std::shared_ptr<Mat> depth, double time_stamp);
 
     Frame::Ptr get_frame() const { return frame_; };
 
@@ -110,7 +110,7 @@ struct VO : sc::state_machine<VO, Init>, VisualOdometry
 public:
     VO(const std::string& filename) : VisualOdometry(filename) {};
 
-    string get_dataset_dir();
+    void add_frame(std::shared_ptr<Mat> color, std::shared_ptr<Mat> depth, double time_stamp);
     bool is_lost() { return lost_flag_; };
     void set_lost() { lost_flag_ = true; };
 

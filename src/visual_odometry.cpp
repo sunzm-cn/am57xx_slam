@@ -345,9 +345,14 @@ double VisualOdometry::getViewAngle (Frame::Ptr frame, MapPoint::Ptr point)
     return acos( n.transpose()*point->norm_ );
 }
 
-string VO::get_dataset_dir()
+EvAddFrame::EvAddFrame(std::shared_ptr<Mat> color, std::shared_ptr<Mat> depth, double time_stamp)
 {
-    return Config::Inst().get<string> ("dataset_dir");
+    frame_ = Frame::createFrame(color, depth, time_stamp);
+}
+
+void VO::add_frame(std::shared_ptr<Mat> color, std::shared_ptr<Mat> depth, double time_stamp)
+{
+    process_event(EvAddFrame(color, depth, time_stamp));
 }
 
 sc::result Init::react(const EvAddFrame & frame)
